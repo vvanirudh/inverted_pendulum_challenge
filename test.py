@@ -5,6 +5,7 @@ import time
 from model import PendulumController
 import numpy as np
 import logging
+import argparse
 
 
 def test_controller_in_sim(model, num_episodes=5, max_steps=500):
@@ -25,7 +26,9 @@ def test_controller_in_sim(model, num_episodes=5, max_steps=500):
     env = PendulumEnv()
 
     # Define the same transform used during training
-    transform = transforms.Compose([])
+    transform = transforms.Compose([
+        transforms.ToTensor(),
+    ])
     if len(transform.transforms) == 0:
         logging.warning("No transforms applied. Ensure that the model is compatible with the input format.")
 
@@ -58,17 +61,21 @@ def test_controller_in_sim(model, num_episodes=5, max_steps=500):
     env.close()
 
 # Add this to your main function to test in simulation
-def main_with_simulation():
+def main_with_simulation(checkpoint_path):
     # Set random seed for reproducibility
     torch.manual_seed(42)
     np.random.seed(42)
     # Load the trained model
     model = PendulumController()
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model.load_state_dict(torch.load('pendulum_controller.pth', map_location=device))
+    if checkpoint_path is not None:
+        model.load_state_dict(torch.load(checkpoint_path, map_location=device))
 
     # Test in simulation
     test_controller_in_sim(model)
 
 if __name__ == "__main__":
-    main_with_simulation()
+    parser = argparse.ArgumentParser(description="Test the Pendulum Controller in simulation.")
+    parser.add_argument("--checkpoint_path", type=str, default=None, help="Path to the model checkpoint.")
+    args = parser.parse_args()
+    main_with_simulation(args.checkpoint_path)

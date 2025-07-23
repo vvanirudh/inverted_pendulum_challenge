@@ -1,10 +1,7 @@
 import torch
 import numpy as np
-from dataset import PendulumDataset
 from model import PendulumController
 from train import train_controller
-from eval import evaluate_controller, visualize_predictions
-import matplotlib.pyplot as plt
 
 def main():
     # Set random seed for reproducibility
