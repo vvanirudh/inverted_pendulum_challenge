@@ -19,7 +19,7 @@ class PendulumEnv:
         self.pendulum_vel = 0.0
 
         # Simulation parameters
-        self.dt = 0.02  # Simulation time step
+        self.dt = 0.1  # Simulation time step
         self.max_force = 10.0
 
         # Rendering
