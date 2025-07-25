@@ -4,3 +4,4 @@ pillow
 torchvision
 matplotlib
 pygame
+ipdb
